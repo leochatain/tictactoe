@@ -88,6 +88,19 @@ export function getChildKeys(board: Board, turn: number): Set<string> {
   return keys;
 }
 
+export function getParentKeys(board: Board, turn: number): Set<string> {
+  if (turn === 0) return new Set();
+  const player: Cell = turn % 2 === 1 ? 'x' : 'o';
+  const keys = new Set<string>();
+  for (let i = 0; i < 9; i++) {
+    if (board[i] !== player) continue;
+    const parent = [...board];
+    parent[i] = null;
+    keys.add(canonicalize(parent));
+  }
+  return keys;
+}
+
 export function generateUniqueBoards(): Map<number, BoardEntry[]> {
   const result = new Map<number, BoardEntry[]>();
   const emptyBoard: Board = Array(9).fill(null);

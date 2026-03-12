@@ -6,17 +6,19 @@ interface BoardGridProps {
   board: Board;
   duplicates: number;
   childCount: number;
+  parentCount: number;
+  zoom: number;
   dimmed: boolean;
   selected: boolean;
   onClick: () => void;
 }
 
-export function BoardGrid({ board, duplicates, childCount, dimmed, selected, onClick }: BoardGridProps) {
+export function BoardGrid({ board, duplicates, childCount, parentCount, zoom, dimmed, selected, onClick }: BoardGridProps) {
   const winner = checkWinner(board);
   const isTerminal = winner !== null || board.every(c => c !== null);
 
   return (
-    <div className="relative group">
+    <div className="relative group" style={{ zoom }}>
       <div
         onClick={onClick}
         className={`card bg-base-100 shadow-sm p-2 cursor-pointer transition-opacity ${
@@ -32,13 +34,16 @@ export function BoardGrid({ board, duplicates, childCount, dimmed, selected, onC
       <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50">
         <div className="bg-neutral text-neutral-content text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-lg text-center">
           <div>{duplicates} equivalent position{duplicates !== 1 ? 's' : ''}</div>
+          {parentCount > 0 && (
+            <div className="opacity-70 mt-0.5">{parentCount} unique parent{parentCount !== 1 ? 's' : ''}</div>
+          )}
           {isTerminal ? (
             <div className="opacity-70 mt-0.5">{winner ? `${winner.toUpperCase()} wins` : 'Draw'}</div>
           ) : (
             <>
               <div className="opacity-70 mt-0.5">{childCount} unique child{childCount !== 1 ? 'ren' : ''}</div>
               <div className="opacity-70 mt-0.5">
-                {selected ? 'Click to deselect' : 'Click to show children'}
+                {selected ? 'Click to deselect' : 'Click to show parents & children'}
               </div>
             </>
           )}

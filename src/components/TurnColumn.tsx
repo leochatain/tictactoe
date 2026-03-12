@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import type { BoardEntry } from '../lib/board';
-import { getChildKeys, checkWinner } from '../lib/board';
+import { getChildKeys, getParentKeys, checkWinner } from '../lib/board';
+
 import { BoardGrid } from './BoardGrid';
 
 interface Selection {
@@ -12,22 +13,27 @@ interface TurnColumnProps {
   turn: number;
   entries: BoardEntry[];
   selection: Selection | null;
-  childKeys: Set<string> | null;
+  highlightedKeys: Set<string> | null;
+  zoom: number;
   onBoardClick: (turn: number, canonicalKey: string) => void;
 }
 
-export function TurnColumn({ turn, entries, selection, childKeys, onBoardClick }: TurnColumnProps) {
+export function TurnColumn({ turn, entries, selection, highlightedKeys, zoom, onBoardClick }: TurnColumnProps) {
   const player = turn === 0 ? null : turn % 2 === 1 ? 'X' : 'O';
   const label = turn === 0
     ? 'Empty board'
     : `${player} plays`;
 
   const isSelectedTurn = selection !== null && selection.turn === turn;
-  const isChildTurn = childKeys !== null;
-  const hasDimming = isSelectedTurn || isChildTurn;
+  const hasDimming = isSelectedTurn || highlightedKeys !== null;
 
   const childCounts = useMemo(
     () => entries.map(entry => checkWinner(entry.board) ? 0 : getChildKeys(entry.board, turn).size),
+    [entries, turn]
+  );
+
+  const parentCounts = useMemo(
+    () => turn === 0 ? entries.map(() => 0) : entries.map(entry => getParentKeys(entry.board, turn).size),
     [entries, turn]
   );
 
@@ -46,8 +52,8 @@ export function TurnColumn({ turn, entries, selection, childKeys, onBoardClick }
             if (isSelectedTurn) {
               selected = entry.canonicalKey === selection!.canonicalKey;
               dimmed = !selected;
-            } else if (isChildTurn) {
-              dimmed = !childKeys!.has(entry.canonicalKey);
+            } else {
+              dimmed = !highlightedKeys!.has(entry.canonicalKey);
             }
           }
 
@@ -57,6 +63,8 @@ export function TurnColumn({ turn, entries, selection, childKeys, onBoardClick }
               board={entry.board}
               duplicates={entry.duplicates}
               childCount={childCounts[i]}
+              parentCount={parentCounts[i]}
+              zoom={zoom}
               dimmed={dimmed}
               selected={selected}
               onClick={() => onBoardClick(turn, entry.canonicalKey)}
