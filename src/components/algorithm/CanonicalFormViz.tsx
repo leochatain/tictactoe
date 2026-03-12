@@ -5,7 +5,7 @@ import { BoardCell } from '../BoardCell';
 
 const DEFAULT_BOARD: Board = ['o', null, null, 'x', 'x', null, null, null, null];
 
-const ROW_COLORS = ['bg-primary/10', 'bg-secondary/10', 'bg-accent/10'];
+const ROW_COLORS = ['bg-amber-200/40', 'bg-sky-200/40', 'bg-rose-200/40'];
 
 function ColoredCell({ value, rowColor }: { value: Cell; rowColor: string }) {
   return (
@@ -26,9 +26,9 @@ function ColoredBoard({ board }: { board: Board }) {
   );
 }
 
-function ColoredString({ text }: { text: string }) {
+function ColoredString({ text, size = 'sm' }: { text: string; size?: 'xs' | 'sm' }) {
   return (
-    <code className="font-mono text-sm">
+    <code className={`font-mono ${size === 'xs' ? 'text-xs' : 'text-sm'}`}>
       {[0, 1, 2].map((row) => (
         <span key={row} className={`${ROW_COLORS[row]} px-0.5 rounded-sm`}>
           {text.slice(row * 3, row * 3 + 3)}
@@ -75,21 +75,19 @@ export function CanonicalFormViz() {
   return (
     <div className="flex flex-col items-center gap-6 w-full">
       {/* Main board with row colors */}
-      <div className="flex flex-col items-center gap-2">
-        <div className="scale-150 my-4">
-          <ColoredBoard board={currentBoard} />
-        </div>
+      <div className="flex flex-col items-center gap-1">
+        <ColoredBoard board={currentBoard} />
       </div>
 
       {/* Controls */}
       <div className="flex gap-2 items-center">
-        <button className="btn btn-sm btn-outline" onClick={rotateCCW} title="Rotação anti-horária">
+        <button className="btn btn-xs btn-outline" onClick={rotateCCW} title="Rotação anti-horária">
           ↻
         </button>
-        <button className="btn btn-sm btn-outline" onClick={rotateCW} title="Rotação horária">
+        <button className="btn btn-xs btn-outline" onClick={rotateCW} title="Rotação horária">
           ↺
         </button>
-        <button className="btn btn-sm btn-outline" onClick={flip} title="Reflexão horizontal">
+        <button className="btn btn-xs btn-outline" onClick={flip} title="Reflexão horizontal">
           ↔
         </button>
       </div>
@@ -98,39 +96,35 @@ export function CanonicalFormViz() {
       <ColoredString text={currentSerialized} />
 
       {/* Unique boards with strings, sorted */}
-      <div className="flex flex-col gap-2 w-full max-w-md">
-        {uniqueSorted.map((item) => {
+      <div className="flex flex-col gap-1.5 w-full">
+        {uniqueSorted.map((item, i) => {
           const isCanonical = item.serialized === canonicalString;
           const isCurrent = item.serialized === currentSerialized;
           return (
             <div
               key={item.serialized}
-              className={`flex items-center gap-3 p-2 rounded-lg transition-all ${
+              className={`flex items-center gap-2 p-1.5 rounded-lg transition-all ${
                 isCanonical ? 'ring-2 ring-accent' :
-                isCurrent ? 'bg-base-300' : 'bg-base-100'
+                isCurrent ? 'ring-2 ring-base-content/30' : 'bg-base-100'
               }`}
             >
+              <span className="text-xs opacity-50 w-4 text-right shrink-0">{i + 1}.</span>
               <div className="grid grid-cols-3 shrink-0">
                 {item.board.map((cell, j) => (
-                  <BoardCell key={j} value={cell} />
+                  <BoardCell key={j} value={cell} size="xs" />
                 ))}
               </div>
-              <code className={`text-sm font-mono ${isCanonical ? 'text-accent font-bold' : 'opacity-70'}`}>
-                {item.serialized}
-              </code>
+              <span className={isCanonical ? 'font-bold' : 'opacity-70'}>
+                <ColoredString text={item.serialized} size="xs" />
+              </span>
               {isCanonical && (
-                <span className="badge badge-accent badge-sm ml-auto shrink-0">
+                <span className="badge badge-accent badge-xs ml-auto shrink-0">
                   canônico
                 </span>
               )}
             </div>
           );
         })}
-      </div>
-
-      <div className="text-center p-3 bg-base-100 rounded-lg">
-        <span className="text-sm opacity-70">Forma canônica: </span>
-        <code className="text-accent font-bold font-mono">{canonicalString}</code>
       </div>
     </div>
   );
