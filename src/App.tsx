@@ -62,12 +62,13 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-base-200 p-4 max-w-6xl mx-auto">
+    <div className="min-h-screen bg-base-200">
+    <div className="p-4 max-w-6xl mx-auto">
       <h1 className="text-2xl font-bold text-center mb-4">
-        Jogo da Velha — Unique Board States
+        Jogo da Velha — Estados Únicos do Tabuleiro
       </h1>
       <p className="text-center text-sm opacity-70 mb-4">
-        All unique tic-tac-toe boards by turn, accounting for rotational and reflective symmetry
+        Todos os tabuleiros únicos por jogada, considerando simetrias de rotação e reflexão
       </p>
       <div className="flex items-center justify-center gap-3 mb-6">
         <button className="btn btn-xs btn-ghost" onClick={() => setZoom(z => Math.max(0.25, +(z - 0.25).toFixed(2)))}>-</button>
@@ -98,6 +99,7 @@ function App() {
             />
           ))}
       </div>
+    </div>
     </div>
   );
 }

@@ -21,8 +21,8 @@ interface TurnColumnProps {
 export function TurnColumn({ turn, entries, selection, highlightedKeys, zoom, onBoardClick }: TurnColumnProps) {
   const player = turn === 0 ? null : turn % 2 === 1 ? 'X' : 'O';
   const label = turn === 0
-    ? 'Empty board'
-    : `${player} plays`;
+    ? 'Tabuleiro vazio'
+    : `${player} joga`;
 
   const isSelectedTurn = selection !== null && selection.turn === turn;
   const hasDimming = isSelectedTurn || highlightedKeys !== null;
@@ -41,7 +41,7 @@ export function TurnColumn({ turn, entries, selection, highlightedKeys, zoom, on
     <section>
       <h2 className="font-bold text-lg mb-2">
         n={turn} <span className="text-sm font-normal opacity-70">— {label}</span>{' '}
-        <span className="text-xs font-normal opacity-50">({entries.length} board{entries.length !== 1 ? 's' : ''})</span>
+        <span className="text-xs font-normal opacity-50">({entries.length} tabuleiro{entries.length !== 1 ? 's' : ''})</span>
       </h2>
       <div className="flex flex-wrap gap-2">
         {entries.map((entry, i) => {

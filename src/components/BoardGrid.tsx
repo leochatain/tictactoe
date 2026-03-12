@@ -33,17 +33,17 @@ export function BoardGrid({ board, duplicates, childCount, parentCount, zoom, di
       </div>
       <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50">
         <div className="bg-neutral text-neutral-content text-xs rounded-lg px-3 py-2 whitespace-nowrap shadow-lg text-center">
-          <div>{duplicates} equivalent position{duplicates !== 1 ? 's' : ''}</div>
+          <div>{duplicates} {duplicates !== 1 ? 'posições equivalentes' : 'posição equivalente'}</div>
           {parentCount > 0 && (
-            <div className="opacity-70 mt-0.5">{parentCount} unique parent{parentCount !== 1 ? 's' : ''}</div>
+            <div className="opacity-70 mt-0.5">{parentCount} {parentCount !== 1 ? 'pais únicos' : 'pai único'}</div>
           )}
           {isTerminal ? (
-            <div className="opacity-70 mt-0.5">{winner ? `${winner.toUpperCase()} wins` : 'Draw'}</div>
+            <div className="opacity-70 mt-0.5">{winner ? `${winner.toUpperCase()} vence` : 'Empate'}</div>
           ) : (
             <>
-              <div className="opacity-70 mt-0.5">{childCount} unique child{childCount !== 1 ? 'ren' : ''}</div>
+              <div className="opacity-70 mt-0.5">{childCount} {childCount !== 1 ? 'filhos únicos' : 'filho único'}</div>
               <div className="opacity-70 mt-0.5">
-                {selected ? 'Click to deselect' : 'Click to show parents & children'}
+                {selected ? 'Clique para desselecionar' : 'Clique para ver pais e filhos'}
               </div>
             </>
           )}
