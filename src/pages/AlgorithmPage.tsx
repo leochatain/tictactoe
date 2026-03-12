@@ -111,8 +111,8 @@ const sections: Section[] = [
           conjunto rejeita automaticamente.
         </p>
         <p className="opacity-70">
-          Note como 8 movimentos possíveis resultam em apenas 3 tabuleiros únicos
-          — a maioria é equivalente por simetria.
+          Note como 8 movimentos possíveis resultam em apenas 2 tabuleiros únicos
+          — os 4 cantos são equivalentes entre si, e as 4 bordas também.
         </p>
       </div>
     ),
