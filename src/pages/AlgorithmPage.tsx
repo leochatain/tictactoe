@@ -23,9 +23,16 @@ const sections: Section[] = [
           o resultado representa o <strong>mesmo estado de jogo</strong>. Da mesma forma
           para qualquer combinação de rotação e reflexão.
         </p>
+        <p className="mb-4">
+          Embora existam 8 transformações, nem sempre elas produzem 8 tabuleiros
+          distintos. Dependendo da simetria do tabuleiro, algumas transformações
+          podem resultar no mesmo estado — por exemplo, girar 4 vezes volta ao
+          original, e em alguns casos uma reflexão produz o mesmo resultado que
+          uma rotação.
+        </p>
         <p className="opacity-70">
           Use os controles ao lado para ver como um tabuleiro se transforma.
-          Todas as 8 variantes representam o mesmo jogo.
+          Abaixo, os estados únicos são mostrados — note que nem sempre são 8.
         </p>
       </div>
     ),
