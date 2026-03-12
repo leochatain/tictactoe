@@ -62,12 +62,37 @@ export function canonicalize(board: Board): string {
   return min;
 }
 
-export function generateUniqueBoards(): Map<number, Board[]> {
-  const result = new Map<number, Board[]>();
+export function orbitSize(board: Board): number {
+  const distinct = new Set(
+    TRANSFORMATIONS.map(perm => serializeBoard(applyTransformation(board, perm)))
+  );
+  return distinct.size;
+}
+
+export interface BoardEntry {
+  board: Board;
+  duplicates: number;
+  canonicalKey: string;
+}
+
+export function getChildKeys(board: Board, turn: number): Set<string> {
+  if (checkWinner(board)) return new Set();
+  const player: Cell = (turn + 1) % 2 === 1 ? 'x' : 'o';
+  const keys = new Set<string>();
+  for (let i = 0; i < 9; i++) {
+    if (board[i] !== null) continue;
+    const child = [...board];
+    child[i] = player;
+    keys.add(canonicalize(child));
+  }
+  return keys;
+}
+
+export function generateUniqueBoards(): Map<number, BoardEntry[]> {
+  const result = new Map<number, BoardEntry[]>();
   const emptyBoard: Board = Array(9).fill(null);
 
-  // n=0: empty board
-  result.set(0, [emptyBoard]);
+  result.set(0, [{ board: emptyBoard, duplicates: orbitSize(emptyBoard), canonicalKey: canonicalize(emptyBoard) }]);
   const seen = new Set<string>();
   seen.add(canonicalize(emptyBoard));
 
@@ -75,10 +100,10 @@ export function generateUniqueBoards(): Map<number, Board[]> {
 
   for (let n = 1; n <= 9; n++) {
     const player: Cell = n % 2 === 1 ? 'x' : 'o';
+    const nextEntries: BoardEntry[] = [];
     const nextBoards: Board[] = [];
 
     for (const board of currentBoards) {
-      // Don't expand terminal boards
       if (checkWinner(board)) continue;
 
       for (let i = 0; i < 9; i++) {
@@ -91,12 +116,13 @@ export function generateUniqueBoards(): Map<number, Board[]> {
         if (!seen.has(canon)) {
           seen.add(canon);
           nextBoards.push(newBoard);
+          nextEntries.push({ board: newBoard, duplicates: orbitSize(newBoard), canonicalKey: canon });
         }
       }
     }
 
-    if (nextBoards.length > 0) {
-      result.set(n, nextBoards);
+    if (nextEntries.length > 0) {
+      result.set(n, nextEntries);
     }
     currentBoards = nextBoards;
   }
