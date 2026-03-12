@@ -47,17 +47,27 @@ const sections: Section[] = [
           com uma <strong>impressão digital única</strong>. Essa é a <em>forma canônica</em>.
         </p>
         <p className="mb-4">
+          O primeiro passo é transformar o tabuleiro em <strong>texto</strong>: lemos
+          as células da esquerda para a direita, de cima para baixo, e escrevemos
+          cada uma como uma letra — <code className="bg-base-300 px-1 rounded">x</code>,{' '}
+          <code className="bg-base-300 px-1 rounded">o</code>, ou{' '}
+          <code className="bg-base-300 px-1 rounded">.</code> para vazio. O resultado
+          é uma sequência de 9 caracteres que representa o tabuleiro por
+          completo — como um "nome" para aquele estado.
+        </p>
+        <p className="mb-4">
+          Ao lado, as cores mostram como cada linha do tabuleiro corresponde a um
+          trecho do texto.
+        </p>
+        <p className="mb-4">
           Para calcular a forma canônica:
         </p>
         <ol className="list-decimal list-inside mb-4 space-y-2">
-          <li>Aplique todas as 8 transformações D4 ao tabuleiro</li>
+          <li>Aplique todas as 8 transformações ao tabuleiro</li>
+          <li>Converta cada resultado em texto</li>
           <li>
-            <strong>Serialize</strong> cada resultado em uma string, lendo da esquerda
-            para a direita, de cima para baixo (ex: <code className="bg-base-300 px-1 rounded">o...x....</code>)
-          </li>
-          <li>
-            Escolha a <strong>menor string</strong> na ordem lexicográfica — essa é a
-            forma canônica
+            Compare os textos em <strong>ordem alfabética</strong> e escolha o
+            menor — essa é a forma canônica
           </li>
         </ol>
         <p className="mb-4">
@@ -66,8 +76,8 @@ const sections: Section[] = [
           o mesmo jogo.
         </p>
         <p className="opacity-70">
-          Ao lado, as 8 variantes estão ordenadas por sua string. A primeira (menor)
-          é a forma canônica.
+          Ao lado, as 8 variantes estão ordenadas por seu texto. A primeira (menor
+          em ordem alfabética) é a forma canônica, destacada em verde.
         </p>
       </div>
     ),
@@ -109,24 +119,22 @@ const sections: Section[] = [
   },
 ];
 
-function VisualizationPanel({ activeSection }: { activeSection: string }) {
-  switch (activeSection) {
-    case 'symmetry':
-      return <SymmetryViz />;
-    case 'canonical':
-      return <CanonicalFormViz />;
-    case 'expansion':
-      return <ExpansionViz />;
-    default:
-      return <SymmetryViz />;
-  }
-}
+import type { ReactNode } from 'react';
+
+const VISUALIZATIONS: Record<string, () => ReactNode> = {
+  symmetry: () => <SymmetryViz />,
+  canonical: () => <CanonicalFormViz />,
+  expansion: () => <ExpansionViz />,
+};
 
 export function AlgorithmPage() {
   return (
     <ScrollytellingLayout
       sections={sections}
-      visualization={(activeSection) => <VisualizationPanel activeSection={activeSection} />}
+      visualization={(sectionId) => {
+        const Component = VISUALIZATIONS[sectionId];
+        return Component ? <Component /> : null;
+      }}
     />
   );
 }

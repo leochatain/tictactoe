@@ -7,7 +7,7 @@ export interface Section {
 
 interface ScrollytellingLayoutProps {
   sections: Section[];
-  visualization: (activeSection: string) => ReactNode;
+  visualization: (sectionId: string, isActive: boolean) => ReactNode;
 }
 
 export function ScrollytellingLayout({ sections, visualization }: ScrollytellingLayoutProps) {
@@ -47,9 +47,18 @@ export function ScrollytellingLayout({ sections, visualization }: Scrollytelling
   return (
     <div className="flex gap-8 max-w-7xl mx-auto p-4">
       {/* Left panel — sticky visualization */}
-      <div className="w-1/2 flex-shrink-0">
-        <div className="sticky top-20 flex items-start justify-center min-h-[70vh]">
-          {visualization(activeSection)}
+      <div className="w-1/2 shrink-0">
+        <div className="sticky top-20 min-h-[70vh] relative">
+          {sections.map((section) => (
+            <div
+              key={section.id}
+              className={`absolute inset-0 flex items-start justify-center transition-opacity duration-500 ${
+                activeSection === section.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}
+            >
+              {visualization(section.id, activeSection === section.id)}
+            </div>
+          ))}
         </div>
       </div>
 
