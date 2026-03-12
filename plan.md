@@ -38,3 +38,59 @@ The practical approach is (1): generate boards level by level (n=0, n=1, ...), c
 ## Stack
 
 Let's use vite, typescript, react, and daisyui+tailwind for components/css.
+
+## Visualizing the algorithm
+
+A new page that teaches the algorithm visually, organized into chapters. Each chapter introduces one concept with interactive visuals. No forward references — each builds on the previous.
+
+### Layout
+
+Scrollytelling pattern: the page is split into two panels.
+
+- **Left panel**: Sticky visualization area that stays in view as the user scrolls.
+- **Right panel**: Long scrollable text content, broken into sections per chapter.
+
+As the right-side text scrolls past thresholds, the left-side visualization transitions to match. Scroll drives everything — no clicking or stepping required.
+
+Implementation: sticky `div` + `IntersectionObserver` to detect which text section is active + React state to update the left panel. CSS transitions or framer-motion for smooth state changes.
+
+### Chapter 1: Symmetry
+
+What it means for two boards to be "the same." A board can be rotated (0°, 90°, 180°, 270°) and reflected (horizontal, vertical, both diagonals) — 8 transformations total (the dihedral group D4). All 8 results represent the same game state.
+
+**Left panel**: One board displayed prominently. Below it: rotate and flip controls. Beside/around it: all 8 D4 transformations shown as smaller boards, with the current one highlighted. User clicks rotate/flip → the main board transforms, the corresponding variant highlights.
+
+**Right panel**: Text explaining the concept of symmetry in tic-tac-toe.
+
+TODO: Let the user place their own X's and O's on the board, with everything updating live.
+
+### Chapter 2: Canonical Form
+
+A way to compute a unique fingerprint for any board:
+
+1. Apply all 8 D4 transformations
+2. Serialize each resulting board to a string (left→right, top→bottom)
+3. Pick the lexicographically smallest string — that's the canonical form
+
+Equivalent boards always produce the same canonical form.
+
+**Left panel**: The visualization evolves from Chapter 1 — same board and 8 transformations, but now a serialized string fades in underneath each one. The boards re-sort themselves by string order. The lexicographically smallest one highlights as the canonical form.
+
+**Right panel**: Text explaining serialization, lexicographic ordering, and why this produces a unique fingerprint.
+
+### Chapter 3: Board Expansion
+
+The core algorithm, one turn at a time:
+
+1. Take each board from turn n−1*
+2. Find all empty cells (possible moves)
+3. Place the next mark in each cell
+4. Canonicalize each resulting board
+5. Add to the set for turn n — the set naturally rejects duplicates
+
+*\*where the game is still ongoing*
+
+**Left panel**: Scene change. A parent board with empty cells highlighted. Children fan out as the next mark is placed in each cell. Each child gets canonicalized (quick visual callback to Ch. 2). Children that produce an already-seen canonical form fade out / don't enter the set. The set is shown growing on the side.
+
+**Right panel**: Text walking through the algorithm steps.
+
