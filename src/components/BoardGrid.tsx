@@ -23,7 +23,7 @@ export function BoardGrid({ board, duplicates, childCount, parentCount, zoom, di
         onClick={onClick}
         className={`card bg-base-100 shadow-sm p-2 cursor-pointer transition-opacity ${
           winner ? 'ring-2 ' + (winner === 'x' ? 'ring-primary' : 'ring-secondary') : ''
-        } ${selected ? 'ring-2 ring-accent' : ''} ${dimmed ? 'opacity-30' : 'opacity-100'}`}
+        } ${selected ? 'ring-2 ring-accent' : ''} ${dimmed ? 'opacity-15 grayscale' : 'opacity-100'}`}
       >
         <div className="grid grid-cols-3">
           {board.map((cell, i) => (
