@@ -3,9 +3,10 @@ import type { Cell } from '../lib/board';
 const SIZES = {
   xs: 'w-5 h-5 text-xs',
   sm: 'w-8 h-8 text-sm',
+  lg: 'w-12 h-12 text-xl',
 };
 
-export function BoardCell({ value, size = 'sm' }: { value: Cell; size?: 'xs' | 'sm' }) {
+export function BoardCell({ value, size = 'sm' }: { value: Cell; size?: 'xs' | 'sm' | 'lg' }) {
   return (
     <div className={`${SIZES[size]} flex items-center justify-center font-bold border border-base-300`}>
       {value === 'x' && <span className="text-primary">X</span>}

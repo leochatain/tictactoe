@@ -70,10 +70,12 @@ export function ExpansionViz() {
         <span className="text-sm font-semibold opacity-70">
           n={PARENT_TURN} — Tabuleiro pai
         </span>
-        <div className="grid grid-cols-3">
-          {PARENT_BOARD.map((cell, i) => (
-            <BoardCell key={i} value={cell} />
-          ))}
+        <div className="card bg-base-100 shadow-sm p-3">
+          <div className="grid grid-cols-3">
+            {PARENT_BOARD.map((cell, i) => (
+              <BoardCell key={i} value={cell} size="lg" />
+            ))}
+          </div>
         </div>
         <span className="text-xs opacity-50">
           {9 - PARENT_TURN} células vazias → {9 - PARENT_TURN} movimentos possíveis

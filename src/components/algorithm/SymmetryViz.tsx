@@ -59,10 +59,10 @@ export function SymmetryViz() {
   return (
     <div className="flex flex-col items-center gap-6 w-full">
       {/* Main board */}
-      <div className="flex flex-col items-center gap-2">
-        <div className="grid grid-cols-3 scale-150 my-4">
+      <div className="card bg-base-100 shadow-sm p-3">
+        <div className="grid grid-cols-3">
           {currentBoard.map((cell, i) => (
-            <BoardCell key={i} value={cell} />
+            <BoardCell key={i} value={cell} size="lg" />
           ))}
         </div>
       </div>

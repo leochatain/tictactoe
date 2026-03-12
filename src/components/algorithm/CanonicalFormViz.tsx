@@ -7,20 +7,21 @@ const DEFAULT_BOARD: Board = ['o', null, null, 'x', 'x', null, null, null, null]
 
 const ROW_COLORS = ['bg-amber-200/40', 'bg-sky-200/40', 'bg-rose-200/40'];
 
-function ColoredCell({ value, rowColor }: { value: Cell; rowColor: string }) {
+function ColoredCell({ value, rowColor, size = 'sm' }: { value: Cell; rowColor: string; size?: 'sm' | 'lg' }) {
+  const sizeClass = size === 'lg' ? 'w-12 h-12 text-xl' : 'w-8 h-8 text-sm';
   return (
-    <div className={`w-8 h-8 flex items-center justify-center text-sm font-bold border border-base-300 ${rowColor}`}>
+    <div className={`${sizeClass} flex items-center justify-center font-bold border border-base-content/30 ${rowColor}`}>
       {value === 'x' && <span className="text-primary">X</span>}
       {value === 'o' && <span className="text-secondary">O</span>}
     </div>
   );
 }
 
-function ColoredBoard({ board }: { board: Board }) {
+function ColoredBoard({ board, size = 'sm' }: { board: Board; size?: 'sm' | 'lg' }) {
   return (
     <div className="grid grid-cols-3">
       {board.map((cell, i) => (
-        <ColoredCell key={i} value={cell} rowColor={ROW_COLORS[Math.floor(i / 3)]} />
+        <ColoredCell key={i} value={cell} rowColor={ROW_COLORS[Math.floor(i / 3)]} size={size} />
       ))}
     </div>
   );
@@ -75,19 +76,19 @@ export function CanonicalFormViz() {
   return (
     <div className="flex flex-col items-center gap-6 w-full">
       {/* Main board with row colors */}
-      <div className="flex flex-col items-center gap-1">
-        <ColoredBoard board={currentBoard} />
+      <div className="card bg-base-100 shadow-sm p-3">
+        <ColoredBoard board={currentBoard} size="lg" />
       </div>
 
       {/* Controls */}
       <div className="flex gap-2 items-center">
-        <button className="btn btn-xs btn-outline" onClick={rotateCCW} title="Rotação anti-horária">
+        <button className="btn btn-sm btn-outline" onClick={rotateCCW} title="Rotação anti-horária">
           ↻
         </button>
-        <button className="btn btn-xs btn-outline" onClick={rotateCW} title="Rotação horária">
+        <button className="btn btn-sm btn-outline" onClick={rotateCW} title="Rotação horária">
           ↺
         </button>
-        <button className="btn btn-xs btn-outline" onClick={flip} title="Reflexão horizontal">
+        <button className="btn btn-sm btn-outline" onClick={flip} title="Reflexão horizontal">
           ↔
         </button>
       </div>
