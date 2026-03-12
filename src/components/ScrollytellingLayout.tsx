@@ -45,9 +45,9 @@ export function ScrollytellingLayout({ sections, visualization }: Scrollytelling
   }, [sections]);
 
   return (
-    <div className="flex gap-8 max-w-7xl mx-auto p-4">
-      {/* Left panel — sticky visualization */}
-      <div className="w-1/2 shrink-0">
+    <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto p-4">
+      {/* Left panel — sticky visualization (hidden on mobile, shown on lg+) */}
+      <div className="hidden lg:block w-1/2 shrink-0">
         <div className="sticky top-20 min-h-[70vh] relative">
           {sections.map((section) => (
             <div
@@ -63,7 +63,7 @@ export function ScrollytellingLayout({ sections, visualization }: Scrollytelling
       </div>
 
       {/* Right panel — scrollable text */}
-      <div className="w-1/2 flex flex-col">
+      <div className="lg:w-1/2 flex flex-col">
         {sections.map((section) => (
           <div
             key={section.id}
@@ -75,10 +75,14 @@ export function ScrollytellingLayout({ sections, visualization }: Scrollytelling
             className="min-h-[80vh] py-12"
           >
             {section.content}
+            {/* Inline visualization on mobile */}
+            <div className="lg:hidden mt-8">
+              {visualization(section.id, true)}
+            </div>
           </div>
         ))}
         {/* Extra space at the bottom so the last section can scroll into view */}
-        <div className="h-[30vh]" />
+        <div className="hidden lg:block h-[30vh]" />
       </div>
     </div>
   );
