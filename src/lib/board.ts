@@ -16,9 +16,14 @@ export function checkWinner(board: Board): Cell {
   return null;
 }
 
+export const TRANSFORMATION_LABELS = [
+  'Identidade', 'Rotação 90°', 'Rotação 180°', 'Rotação 270°',
+  'Reflexão ↔', 'Reflexão ↕', 'Reflexão ⟍', 'Reflexão ⟋',
+];
+
 // D4 group: 4 rotations × 2 (with/without reflection) = 8 transformations
 // Each is an index permutation of the 3×3 grid
-const TRANSFORMATIONS: number[][] = (() => {
+export const TRANSFORMATIONS: number[][] = (() => {
   // Identity mapping: row,col → index
   const idx = (r: number, c: number) => r * 3 + c;
 
@@ -45,11 +50,11 @@ const TRANSFORMATIONS: number[][] = (() => {
   });
 })();
 
-function applyTransformation(board: Board, perm: number[]): Board {
+export function applyTransformation(board: Board, perm: number[]): Board {
   return perm.map(i => board[i]);
 }
 
-function serializeBoard(board: Board): string {
+export function serializeBoard(board: Board): string {
   return board.map(c => c ?? '.').join('');
 }
 
