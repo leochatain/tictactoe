@@ -34,10 +34,6 @@ export function SymmetryViz() {
     setCurrentBoard(b => applyTransformation(b, TRANSFORMATIONS[4]));
   }, []);
 
-  const reset = useCallback(() => {
-    setCurrentBoard(DEFAULT_BOARD);
-  }, []);
-
   // Deduplicated unique boards from all 8 transformations
   const uniqueBoards = useMemo(() => {
     const seen = new Set<string>();
