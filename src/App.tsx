@@ -1,6 +1,7 @@
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { HomePage } from './pages/HomePage';
 import { AlgorithmPage } from './pages/AlgorithmPage';
+import { MenacePage } from './pages/MenacePage';
 
 function App() {
   const location = useLocation();
@@ -21,11 +22,18 @@ function App() {
           >
             Algoritmo
           </Link>
+          <Link
+            to="/menace"
+            className={`btn btn-sm ${location.pathname === '/menace' ? 'btn-active' : 'btn-ghost'}`}
+          >
+            MENACE
+          </Link>
         </div>
       </nav>
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/algorithm" element={<AlgorithmPage />} />
+        <Route path="/menace" element={<MenacePage />} />
       </Routes>
     </div>
   );

@@ -67,6 +67,17 @@ export function canonicalize(board: Board): string {
   return min;
 }
 
+export function findActualCellForChild(actualBoard: Board, turn: number, childKey: string): number | null {
+  const player: Cell = (turn + 1) % 2 === 1 ? 'x' : 'o';
+  for (let i = 0; i < 9; i++) {
+    if (actualBoard[i] !== null) continue;
+    const child = [...actualBoard];
+    child[i] = player;
+    if (canonicalize(child) === childKey) return i;
+  }
+  return null;
+}
+
 export function orbitSize(board: Board): number {
   const distinct = new Set(
     TRANSFORMATIONS.map(perm => serializeBoard(applyTransformation(board, perm)))
