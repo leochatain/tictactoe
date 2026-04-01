@@ -27,6 +27,11 @@ export function TurnColumn({ turn, entries, selection, highlightedKeys, zoom, on
   const isSelectedTurn = selection !== null && selection.turn === turn;
   const hasDimming = isSelectedTurn || highlightedKeys !== null;
 
+  const nonTerminalCount = useMemo(
+    () => entries.filter(entry => !checkWinner(entry.board)).length,
+    [entries]
+  );
+
   const childCounts = useMemo(
     () => entries.map(entry => checkWinner(entry.board) ? 0 : getChildKeys(entry.board, turn).size),
     [entries, turn]
@@ -41,7 +46,7 @@ export function TurnColumn({ turn, entries, selection, highlightedKeys, zoom, on
     <section>
       <h2 className="font-bold text-lg mb-2">
         n={turn} <span className="text-sm font-normal opacity-70">— {label}</span>{' '}
-        <span className="text-xs font-normal opacity-50">({entries.length} tabuleiro{entries.length !== 1 ? 's' : ''})</span>
+        <span className="text-xs font-normal opacity-50">({entries.length} tabuleiro{entries.length !== 1 ? 's' : ''}{nonTerminalCount < entries.length ? `, ${nonTerminalCount} não-finai${nonTerminalCount !== 1 ? 's' : ''}` : ''})</span>
       </h2>
       <div className="flex flex-wrap gap-2">
         {entries.map((entry, i) => {
