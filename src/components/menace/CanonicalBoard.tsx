@@ -1,16 +1,16 @@
 import type { Board } from '../../lib/board';
 
-// Fixed color per cell position (0-8)
+// Fixed color per cell position (0-8), left to right, top to bottom
 export const BEAD_COLORS = [
-  'bg-red-400',
-  'bg-blue-400',
-  'bg-green-400',
   'bg-yellow-400',
-  'bg-purple-400',
-  'bg-pink-400',
+  'bg-white',
+  'bg-gray-400',
   'bg-orange-400',
-  'bg-teal-400',
-  'bg-cyan-400',
+  'bg-black',
+  'bg-pink-400',
+  'bg-purple-400',
+  'bg-green-400',
+  'bg-red-400',
 ];
 
 interface CanonicalBoardProps {
@@ -48,7 +48,7 @@ export function CanonicalBoard({ board, cellChildKey, interactive, onCellClick }
               {cell === 'x' && <span className="text-primary">X</span>}
               {cell === 'o' && <span className="text-secondary">O</span>}
               {clickable && (
-                <span className="w-6 h-6 rounded-full border-2 border-white/50 shadow-inner" />
+                <span className={`w-6 h-6 rounded-full border-2 shadow-inner ${i === 1 ? 'border-base-300' : 'border-white/50'}`} />
               )}
             </button>
           );
