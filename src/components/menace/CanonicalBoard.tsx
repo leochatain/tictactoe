@@ -1,17 +1,5 @@
-import type { Board } from '../../lib/board';
-
-// Fixed color per cell position (0-8), left to right, top to bottom
-export const BEAD_COLORS = [
-  'bg-yellow-400',
-  'bg-white',
-  'bg-gray-400',
-  'bg-orange-400',
-  'bg-black',
-  'bg-pink-400',
-  'bg-purple-400',
-  'bg-green-400',
-  'bg-red-400',
-];
+import type { Board } from "../../lib/board";
+import { BEAD_COLORS } from "./beadColors";
 
 interface CanonicalBoardProps {
   board: Board;
@@ -20,10 +8,15 @@ interface CanonicalBoardProps {
   onCellClick: (cellIndex: number) => void;
 }
 
-export function CanonicalBoard({ board, cellChildKey, interactive, onCellClick }: CanonicalBoardProps) {
+export function CanonicalBoard({
+  board,
+  cellChildKey,
+  interactive,
+  onCellClick,
+}: CanonicalBoardProps) {
   // Only show a bead for the first cell of each unique child (one bead per unique move)
   const seenChildKeys = new Set<string>();
-  const isRepresentative: boolean[] = cellChildKey.map(key => {
+  const isRepresentative: boolean[] = cellChildKey.map((key) => {
     if (key === null || seenChildKeys.has(key)) return false;
     seenChildKeys.add(key);
     return true;
@@ -40,15 +33,17 @@ export function CanonicalBoard({ board, cellChildKey, interactive, onCellClick }
               disabled={!clickable}
               onClick={() => clickable && onCellClick(i)}
               className={`w-16 h-16 flex items-center justify-center text-2xl font-bold border border-base-300 transition-all
-                ${clickable ? `${BEAD_COLORS[i]} cursor-pointer hover:brightness-110 hover:scale-105` : ''}
-                ${!clickable && cell === null ? 'bg-base-200' : ''}
-                ${cell !== null ? 'bg-base-100' : ''}
+                ${clickable ? `${BEAD_COLORS[i]} cursor-pointer hover:brightness-110 hover:scale-105` : ""}
+                ${!clickable && cell === null ? "bg-base-200" : ""}
+                ${cell !== null ? "bg-base-100" : ""}
               `}
             >
-              {cell === 'x' && <span className="text-primary">X</span>}
-              {cell === 'o' && <span className="text-secondary">O</span>}
+              {cell === "x" && <span className="text-primary">X</span>}
+              {cell === "o" && <span className="text-secondary">O</span>}
               {clickable && (
-                <span className={`w-6 h-6 rounded-full border-2 shadow-inner ${i === 1 ? 'border-base-300' : 'border-white/50'}`} />
+                <span
+                  className={`w-6 h-6 rounded-full border-2 shadow-inner ${i === 1 ? "border-base-300" : "border-white/50"}`}
+                />
               )}
             </button>
           );

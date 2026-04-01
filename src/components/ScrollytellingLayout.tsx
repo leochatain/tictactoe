@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
 export interface Section {
   id: string;
@@ -10,8 +10,11 @@ interface ScrollytellingLayoutProps {
   visualization: (sectionId: string, isActive: boolean) => ReactNode;
 }
 
-export function ScrollytellingLayout({ sections, visualization }: ScrollytellingLayoutProps) {
-  const [activeSection, setActiveSection] = useState(sections[0]?.id ?? '');
+export function ScrollytellingLayout({
+  sections,
+  visualization,
+}: ScrollytellingLayoutProps) {
+  const [activeSection, setActiveSection] = useState(sections[0]?.id ?? "");
   const sectionRefs = useRef<Map<string, HTMLElement>>(new Map());
 
   useEffect(() => {
@@ -21,20 +24,23 @@ export function ScrollytellingLayout({ sections, visualization }: Scrollytelling
         let bestEntry: IntersectionObserverEntry | null = null;
         for (const entry of entries) {
           if (entry.isIntersecting) {
-            if (!bestEntry || entry.intersectionRatio > bestEntry.intersectionRatio) {
+            if (
+              !bestEntry ||
+              entry.intersectionRatio > bestEntry.intersectionRatio
+            ) {
               bestEntry = entry;
             }
           }
         }
         if (bestEntry) {
-          const id = bestEntry.target.getAttribute('data-section');
+          const id = bestEntry.target.getAttribute("data-section");
           if (id) setActiveSection(id);
         }
       },
       {
-        rootMargin: '-20% 0px -60% 0px',
+        rootMargin: "-20% 0px -60% 0px",
         threshold: [0, 0.25, 0.5, 0.75, 1],
-      }
+      },
     );
 
     for (const el of sectionRefs.current.values()) {
@@ -53,7 +59,9 @@ export function ScrollytellingLayout({ sections, visualization }: Scrollytelling
             <div
               key={section.id}
               className={`absolute inset-0 flex items-start justify-center transition-opacity duration-500 ${
-                activeSection === section.id ? 'opacity-100' : 'opacity-0 pointer-events-none'
+                activeSection === section.id
+                  ? "opacity-100"
+                  : "opacity-0 pointer-events-none"
               }`}
             >
               {visualization(section.id, activeSection === section.id)}
