@@ -153,17 +153,19 @@ export function MenacePage() {
 
       <div className="text-center mb-6">
         {phase === 'menace' && (
-          <div className="badge badge-primary badge-lg">
+          <div className="bg-primary text-primary-content rounded-lg px-4 py-2 text-sm inline-block">
             Vez do MENACE — escolha a miçanga sorteada na caixa
           </div>
         )}
         {phase === 'human' && (
-          <div className="badge badge-secondary badge-lg">
+          <div className="bg-secondary text-secondary-content rounded-lg px-4 py-2 text-sm inline-block">
             Vez do jogador — clique no tabuleiro
           </div>
         )}
         {phase === 'game-over' && (
-          <div className="badge badge-neutral badge-lg">Fim de jogo</div>
+          <div className="bg-neutral text-neutral-content rounded-lg px-4 py-2 text-sm inline-block">
+            Fim de jogo
+          </div>
         )}
       </div>
 
