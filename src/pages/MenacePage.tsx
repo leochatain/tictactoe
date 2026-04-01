@@ -14,7 +14,7 @@ interface GameState {
 }
 
 type Action =
-  | { type: 'MENACE_MOVE'; childKey: string; beadColorIndex: number }
+  | { type: 'MENACE_MOVE'; canonicalCellIndex: number }
   | { type: 'HUMAN_MOVE'; actualCell: number }
   | { type: 'UNDO' }
   | { type: 'RESET' };
@@ -39,14 +39,18 @@ function makeReducer(boardLookup: Map<string, Board>) {
       case 'MENACE_MOVE': {
         const currentKey = canonicalize(state.board);
         const currentCanonicalBoard = boardLookup.get(currentKey)!;
-        const actualCell = findActualCellForChild(state.board, state.turn, action.childKey);
+        // Derive child key from the cell clicked on the canonical board
+        const child = [...currentCanonicalBoard];
+        child[action.canonicalCellIndex] = 'x';
+        const childKey = canonicalize(child);
+        const actualCell = findActualCellForChild(state.board, state.turn, childKey);
         if (actualCell === null) return state;
         const newBoard = [...state.board];
         newBoard[actualCell] = 'x';
         const record: MoveRecord = {
           canonicalBoard: currentCanonicalBoard,
-          chosenChildBoard: boardLookup.get(action.childKey)!,
-          beadColorIndex: action.beadColorIndex,
+          chosenChildBoard: boardLookup.get(childKey)!,
+          beadColorIndex: action.canonicalCellIndex,
         };
         return {
           board: newBoard,
@@ -110,23 +114,19 @@ export function MenacePage() {
   const currentCanonicalBoard = boardLookup.get(currentKey)!;
 
   // For each empty cell on the canonical board, which child canonical key does playing there produce?
-  const { cellChildKey, childKeyOrder } = useMemo(() => {
-    if (phase !== 'menace') return { cellChildKey: Array(9).fill(null) as (string | null)[], childKeyOrder: [] as string[] };
-    const player = 'x' as const;
+  const cellChildKey = useMemo(() => {
+    if (phase !== 'menace') return Array(9).fill(null) as (string | null)[];
     const mapping: (string | null)[] = [];
-    const seenKeys: string[] = [];
     for (let i = 0; i < 9; i++) {
       if (currentCanonicalBoard[i] !== null) {
         mapping.push(null);
       } else {
         const child = [...currentCanonicalBoard];
-        child[i] = player;
-        const key = canonicalize(child);
-        mapping.push(key);
-        if (!seenKeys.includes(key)) seenKeys.push(key);
+        child[i] = 'x';
+        mapping.push(canonicalize(child));
       }
     }
-    return { cellChildKey: mapping, childKeyOrder: seenKeys };
+    return mapping;
   }, [currentCanonicalBoard, phase]);
 
   return (
@@ -173,12 +173,10 @@ export function MenacePage() {
           <CanonicalBoard
             board={currentCanonicalBoard}
             cellChildKey={cellChildKey}
-            childKeyOrder={childKeyOrder}
             interactive={phase === 'menace'}
-            onChildClick={(childKey) => {
-              const colorIdx = childKeyOrder.indexOf(childKey);
-              dispatch({ type: 'MENACE_MOVE', childKey, beadColorIndex: colorIdx });
-            }}
+            onCellClick={(cellIndex) =>
+              dispatch({ type: 'MENACE_MOVE', canonicalCellIndex: cellIndex })
+            }
           />
         </div>
 
