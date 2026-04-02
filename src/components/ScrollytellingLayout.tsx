@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 export interface Section {
   id: string;
@@ -14,7 +14,7 @@ export function ScrollytellingLayout({
   sections,
   visualization,
 }: ScrollytellingLayoutProps) {
-  const [activeSection, setActiveSection] = useState(sections[0]?.id ?? "");
+  const [activeSection, setActiveSection] = useState(sections[0]?.id ?? '');
   const sectionRefs = useRef<Map<string, HTMLElement>>(new Map());
 
   useEffect(() => {
@@ -33,12 +33,12 @@ export function ScrollytellingLayout({
           }
         }
         if (bestEntry) {
-          const id = bestEntry.target.getAttribute("data-section");
+          const id = bestEntry.target.getAttribute('data-section');
           if (id) setActiveSection(id);
         }
       },
       {
-        rootMargin: "-20% 0px -60% 0px",
+        rootMargin: '-20% 0px -60% 0px',
         threshold: [0, 0.25, 0.5, 0.75, 1],
       },
     );
@@ -60,8 +60,8 @@ export function ScrollytellingLayout({
               key={section.id}
               className={`absolute inset-0 flex items-start justify-center transition-opacity duration-500 ${
                 activeSection === section.id
-                  ? "opacity-100"
-                  : "opacity-0 pointer-events-none"
+                  ? 'opacity-100'
+                  : 'opacity-0 pointer-events-none'
               }`}
             >
               {visualization(section.id, activeSection === section.id)}

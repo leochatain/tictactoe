@@ -1,5 +1,5 @@
-import type { Board, Cell } from "../../lib/board";
-import { BEAD_COLORS } from "./beadColors";
+import type { Board, Cell } from '../../lib/board';
+import { BEAD_COLORS } from './beadColors';
 
 export interface MoveRecord {
   canonicalBoard: Board;
@@ -18,29 +18,29 @@ export function GameOverSummary({
   history,
   onNewGame,
 }: GameOverSummaryProps) {
-  const menaceWon = winner === "x";
-  const menaceLost = winner === "o";
+  const menaceWon = winner === 'x';
+  const menaceLost = winner === 'o';
   const isDraw = !winner;
 
   let updateLabel: string;
   let updateClass: string;
   if (menaceWon) {
-    updateLabel = "+3 miçangas da cor sorteada";
-    updateClass = "badge-success";
+    updateLabel = '+3 miçangas da cor sorteada';
+    updateClass = 'badge-success';
   } else if (isDraw) {
-    updateLabel = "+1 miçanga da cor sorteada";
-    updateClass = "badge-warning";
+    updateLabel = '+1 miçanga da cor sorteada';
+    updateClass = 'badge-warning';
   } else {
-    updateLabel = "Remover a miçanga sorteada";
-    updateClass = "badge-error";
+    updateLabel = 'Remover a miçanga sorteada';
+    updateClass = 'badge-error';
   }
 
   return (
     <div className="card bg-base-100 shadow-md p-4 w-full max-w-lg">
       <h3 className="text-lg font-bold mb-3">
-        {menaceWon && "MENACE venceu!"}
-        {menaceLost && "MENACE perdeu!"}
-        {isDraw && "Empate!"}
+        {menaceWon && 'MENACE venceu!'}
+        {menaceLost && 'MENACE perdeu!'}
+        {isDraw && 'Empate!'}
       </h3>
 
       <p className="text-sm mb-3">
@@ -105,16 +105,16 @@ function SummaryBoard({
       {board.map((cell, i) => (
         <div
           key={i}
-          className={`w-8 h-8 flex items-center justify-center text-xs font-bold border border-base-300/50 ${i === highlightCell && highlightColor ? highlightColor : ""}`}
+          className={`w-8 h-8 flex items-center justify-center text-xs font-bold border border-base-300/50 ${i === highlightCell && highlightColor ? highlightColor : ''}`}
         >
-          {cell === "x" && (
+          {cell === 'x' && (
             <span
-              className={i === highlightCell ? "text-white" : "text-primary"}
+              className={i === highlightCell ? 'text-white' : 'text-primary'}
             >
               X
             </span>
           )}
-          {cell === "o" && <span className="text-secondary">O</span>}
+          {cell === 'o' && <span className="text-secondary">O</span>}
         </div>
       ))}
     </div>

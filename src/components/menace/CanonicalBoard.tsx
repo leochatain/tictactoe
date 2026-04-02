@@ -1,5 +1,5 @@
-import type { Board } from "../../lib/board";
-import { BEAD_COLORS } from "./beadColors";
+import type { Board } from '../../lib/board';
+import { BEAD_COLORS } from './beadColors';
 
 interface CanonicalBoardProps {
   board: Board;
@@ -33,16 +33,16 @@ export function CanonicalBoard({
               disabled={!clickable}
               onClick={() => clickable && onCellClick(i)}
               className={`w-16 h-16 flex items-center justify-center text-2xl font-bold border border-base-300 transition-all
-                ${clickable ? `${BEAD_COLORS[i]} cursor-pointer hover:brightness-110 hover:scale-105` : ""}
-                ${!clickable && cell === null ? "bg-base-200" : ""}
-                ${cell !== null ? "bg-base-100" : ""}
+                ${clickable ? `${BEAD_COLORS[i]} cursor-pointer hover:brightness-110 hover:scale-105` : ''}
+                ${!clickable && cell === null ? 'bg-base-200' : ''}
+                ${cell !== null ? 'bg-base-100' : ''}
               `}
             >
-              {cell === "x" && <span className="text-primary">X</span>}
-              {cell === "o" && <span className="text-secondary">O</span>}
+              {cell === 'x' && <span className="text-primary">X</span>}
+              {cell === 'o' && <span className="text-secondary">O</span>}
               {clickable && (
                 <span
-                  className={`w-6 h-6 rounded-full border-2 shadow-inner ${i === 1 ? "border-base-300" : "border-white/50"}`}
+                  className={`w-6 h-6 rounded-full border-2 shadow-inner ${i === 1 ? 'border-base-300' : 'border-white/50'}`}
                 />
               )}
             </button>
