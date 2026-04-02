@@ -1,5 +1,9 @@
 import { useMemo, useState, useCallback } from 'react';
-import { generateUniqueBoards, getChildKeys, getParentKeys } from '../lib/board';
+import {
+  generateUniqueBoards,
+  getChildKeys,
+  getParentKeys,
+} from '../lib/board';
 import { TurnColumn } from '../components/TurnColumn';
 
 interface Selection {
@@ -14,7 +18,9 @@ export function HomePage() {
   const highlightedKeys = useMemo(() => {
     if (!selection) return null;
     const entries = boardsByTurn.get(selection.turn);
-    const entry = entries?.find(e => e.canonicalKey === selection.canonicalKey);
+    const entry = entries?.find(
+      (e) => e.canonicalKey === selection.canonicalKey,
+    );
     if (!entry) return null;
 
     const map = new Map<number, Set<string>>();
@@ -52,12 +58,13 @@ export function HomePage() {
   }, [selection, boardsByTurn]);
 
   const [zoom, setZoom] = useState(1);
+  const [menaceOnly, setMenaceOnly] = useState(false);
 
   const handleBoardClick = useCallback((turn: number, canonicalKey: string) => {
-    setSelection(prev =>
+    setSelection((prev) =>
       prev && prev.turn === turn && prev.canonicalKey === canonicalKey
         ? null
-        : { turn, canonicalKey }
+        : { turn, canonicalKey },
     );
   }, []);
 
@@ -67,10 +74,27 @@ export function HomePage() {
         Jogo da Velha — Estados Únicos do Tabuleiro
       </h1>
       <p className="text-center text-sm opacity-70 mb-4">
-        Todos os tabuleiros únicos por jogada, considerando simetrias de rotação e reflexão
+        Todos os tabuleiros únicos por jogada, considerando simetrias de rotação
+        e reflexão
       </p>
+      <div className="flex items-center justify-center gap-3 mb-2">
+        <label className="label cursor-pointer gap-2">
+          <span className="label-text text-xs">Apenas turnos do MENACE</span>
+          <input
+            type="checkbox"
+            className="toggle toggle-xs toggle-primary"
+            checked={menaceOnly}
+            onChange={(e) => setMenaceOnly(e.target.checked)}
+          />
+        </label>
+      </div>
       <div className="flex items-center justify-center gap-3 mb-6">
-        <button className="btn btn-xs btn-ghost" onClick={() => setZoom(z => Math.max(0.25, +(z - 0.25).toFixed(2)))}>-</button>
+        <button
+          className="btn btn-xs btn-ghost"
+          onClick={() => setZoom((z) => Math.max(0.25, +(z - 0.25).toFixed(2)))}
+        >
+          -
+        </button>
         <input
           type="range"
           className="range range-xs w-32"
@@ -78,21 +102,31 @@ export function HomePage() {
           max={2}
           step={0.25}
           value={zoom}
-          onChange={e => setZoom(+e.target.value)}
+          onChange={(e) => setZoom(+e.target.value)}
         />
-        <button className="btn btn-xs btn-ghost" onClick={() => setZoom(z => Math.min(2, +(z + 0.25).toFixed(2)))}>+</button>
-        <span className="text-xs opacity-60 w-12">{Math.round(zoom * 100)}%</span>
+        <button
+          className="btn btn-xs btn-ghost"
+          onClick={() => setZoom((z) => Math.min(2, +(z + 0.25).toFixed(2)))}
+        >
+          +
+        </button>
+        <span className="text-xs opacity-60 w-12">
+          {Math.round(zoom * 100)}%
+        </span>
       </div>
       <div className="flex flex-col gap-8">
         {Array.from(boardsByTurn.entries())
           .sort(([a], [b]) => a - b)
+          .filter(([turn]) => !menaceOnly || turn % 2 === 0)
           .map(([turn, entries]) => (
             <TurnColumn
               key={turn}
               turn={turn}
               entries={entries}
               selection={selection}
-              highlightedKeys={selection ? (highlightedKeys?.get(turn) ?? null) : null}
+              highlightedKeys={
+                selection ? (highlightedKeys?.get(turn) ?? null) : null
+              }
               zoom={zoom}
               onBoardClick={handleBoardClick}
             />
