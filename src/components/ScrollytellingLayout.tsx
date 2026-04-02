@@ -54,7 +54,7 @@ export function ScrollytellingLayout({
     <div className="flex flex-col lg:flex-row gap-8 max-w-7xl mx-auto p-4">
       {/* Left panel — sticky visualization (hidden on mobile, shown on lg+) */}
       <div className="hidden lg:block w-1/2 shrink-0">
-        <div className="sticky top-20 min-h-[70vh] relative">
+        <div className="sticky top-20 min-h-[70vh]">
           {sections.map((section) => (
             <div
               key={section.id}
